@@ -5,3 +5,4 @@ nose
 coverage
 gunicorn
 sphinx
+sphinx_rtd_theme
