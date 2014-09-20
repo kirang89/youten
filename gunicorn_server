@@ -1,0 +1,10 @@
+#!/bin/bash
+
+# Start Gunicorn server
+exec gunicorn server:app --bind 0.0.0.0:5000 \
+                         --workers 2 \
+                         --name "Youten API"
+                         --bind=unix:/webapps/youten/run/gunicorn.sock \
+                         --debug \
+                         --log-level debug \
+                         --log-file /webapps/youten/logs/gunicorn.log
