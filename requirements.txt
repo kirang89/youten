@@ -4,3 +4,4 @@ pygments
 nose
 coverage
 gunicorn
+sphinx
