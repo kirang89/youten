@@ -1,4 +1,4 @@
-import datetime
+from datetime import datetime
 
 
 class Serializer(object):
@@ -29,5 +29,4 @@ class Serializer(object):
             ret = value.get_public()
         else:
             ret = value
-
         return ret

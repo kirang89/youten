@@ -42,16 +42,20 @@ def save_snippet():
                           code=request.json['snippet'])
         db.session.add(snippet)
         db.session.commit()
+        return Response(json.dumps({"id": snippet.id}),
+                        201,
+                        mimetype='application/json')
     else:
         return not_acceptable('Please ensure that your request contains a valid JSON')
 
 
 @api_v1.route('/snippets', methods=['GET'])
 def get_all_snippets():
-    snippets = Snippets.query.all()
+    data = {}
     data['snippets'] = []
+    snippets = Snippet.query.all()
     for snippet in snippets:
-        data[snippets].append(snippet.get_public())
+        data['snippets'].append(snippet.get_dict())
     return Response(json.dumps(data),
                     200,
                     mimetype='application/json')
@@ -59,8 +63,9 @@ def get_all_snippets():
 
 @api_v1.route('/snippets/language/<language>', methods=['GET'])
 def get_all_snippets_for_language(language):
-    snippets = Snippets.query.filter_by(language=language).all()
+    data = {}
     data['snippets'] = []
+    snippets = Snippet.query.filter_by(language=language).all()
     for snippet in snippets:
         data[snippets].append(snippet.get_public())
     return Response(json.dumps(data),
