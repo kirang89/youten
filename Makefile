@@ -38,4 +38,4 @@ test:
 	env/bin/nosetests tests
 
 testc:
-	env/bin/nosetests tests --with-coverage --cover-package=app
+	env/bin/nosetests tests --with-coverage --cover-package=api
