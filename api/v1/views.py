@@ -1,8 +1,5 @@
 from functools import wraps
-
 from flask import request, Blueprint, jsonify
-from sqlalchemy.orm.exc import NoResultFound, MultipleResultsFound
-
 from api.errors import *
 from api.models import Snippet
 
@@ -27,7 +24,6 @@ def shutdown_session(exception=None):
 
 
 @api_v1.route('/meta', methods=['GET'])
-@requires_authentication
 def index():
     data = {
         "name": "My API",
@@ -39,7 +35,6 @@ def index():
 
 
 @api_v1.route('/snippets', methods=['POST'])
-@requires_authentication
 def save_snippet():
     if request.json:
         snippet = Snippet(title=request.json['title'],
@@ -52,7 +47,6 @@ def save_snippet():
 
 
 @api_v1.route('/snippets', methods=['GET'])
-@requires_authentication
 def get_all_snippets():
     snippets = Snippets.query.all()
     data['snippets'] = []
@@ -64,7 +58,6 @@ def get_all_snippets():
 
 
 @api_v1.route('/snippets/language/<language>', methods=['GET'])
-@requires_authentication
 def get_all_snippets_for_language(language):
     snippets = Snippets.query.filter_by(language=language).all()
     data['snippets'] = []
@@ -76,7 +69,6 @@ def get_all_snippets_for_language(language):
 
 
 @api_v1.route('/snippets/<snippet_id>', methods=['DELETE'])
-@requires_authentication
 def delete_snippet(snippet_id):
     snippet = Session.query.get(snippet_id)
     if snippet:

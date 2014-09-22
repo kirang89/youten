@@ -1,8 +1,8 @@
 import json
 from flask import Response
 from v1.views import api_v1
-from api import app, db
-from api.errors import *
+from . import app
+from .errors import *
 
 
 app.register_blueprint(api_v1, url_prefix='/v1')
