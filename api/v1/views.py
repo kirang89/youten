@@ -53,7 +53,7 @@ def save_snippet():
 def get_all_snippets():
     data = {}
     data['snippets'] = []
-    snippets = Snippet.query.all()
+    snippets = Snippet.query.order_by(Snippet.updated_at)
     for snippet in snippets:
         data['snippets'].append(snippet.get_dict())
     return Response(json.dumps(data),
@@ -67,15 +67,19 @@ def get_all_snippets_for_language(language):
     data['snippets'] = []
     snippets = Snippet.query.filter_by(language=language).all()
     for snippet in snippets:
-        data[snippets].append(snippet.get_public())
+        print snippet.id
+        data['snippets'].append(snippet.get_dict())
     return Response(json.dumps(data),
                     200,
                     mimetype='application/json')
 
 
 @api_v1.route('/snippets/<snippet_id>', methods=['DELETE'])
-def delete_snippet(snippet_id):
-    snippet = Session.query.get(snippet_id)
+def test_delete_snippet(snippet_id):
+    snippet = Snippet.query.get(snippet_id)
     if snippet:
         db.session.delete(snippet)
         db.session.commit()
+        return Response(200)
+    else:
+        return not_found()
