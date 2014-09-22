@@ -4,7 +4,7 @@
 
 import json
 from flask import jsonify, Response
-from api import app
+from api import app, db
 
 
 @app.errorhandler(404)
@@ -23,6 +23,8 @@ app.error_handler_spec[None][404] = not_found
 
 @app.errorhandler(500)
 def internal_error(e=None):
+    print "500 CALLED"
+    db.session.rollback()
     return Response(json.dumps({"error": "Something went wrong"}),
                     status=500,
                     mimetype='application/json')
@@ -49,6 +51,17 @@ def method_unexpected(error=None, url=''):
     }
     return Response(json.dumps(message),
                     status=405,
+                    mimetype='application/json')
+
+
+@app.errorhandler(406)
+def not_acceptable(error='Not acceptable'):
+    message = {
+        'status': 406,
+        'message': error,
+    }
+    return Response(json.dumps(message),
+                    status=406,
                     mimetype='application/json')
 
 

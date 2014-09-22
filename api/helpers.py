@@ -6,7 +6,7 @@ class Serializer(object):
     in json-compatible format"""
     __public__ = None
 
-    def get_public(self, exclude=(), extra=()):
+    def get_dict(self, exclude=(), extra=()):
         "Returns model's PUBLIC data for jsonify"
         data = {}
         keys = self._sa_instance_state.attrs.items()

@@ -35,7 +35,7 @@ returns:
 
 Get all snippets by programming language
 ----------------------------------------
-``/v1/snippets/<language> GET``
+``/v1/snippets/language/<language> GET``
 
 returns:
     - JSON array of all snippets created in the specified language

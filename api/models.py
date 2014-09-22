@@ -6,6 +6,7 @@ import uuid
 class Snippet(db.Model, Serializer):
     """A code snippet"""
     __tablename__ = 'snippets'
+    __public__ = ('id', 'code', 'title', 'language')
     id = db.Column(db.String, primary_key=True, unique=True)
     code = db.Column(db.Text)
     title = db.Column(db.Text)
