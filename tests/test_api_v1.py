@@ -102,6 +102,33 @@ class APIv1Test(unittest.TestCase):
         snippets = data['snippets']
         self.assertEqual(len(snippets), 1)
 
+    def test_update_snippet(self):
+        data = {
+            "snippet": """
+                import cStringIO
+                from boto.s3.connection import S3Connection
+                from boto.s3.key import Key
+
+
+                def upload_to_s3(filename, extension, file):
+                    conn = S3Connection('AWS_ACCESS_KEY', 'AWS_SECRET_KEY')
+                    k = Key(conn.get_bucket('<bucket name>'))
+                    k.key = filename
+                    k.set_metadata("Content-Type", file.mimetype)
+                    fp = cStringIO.StringIO(file.read())
+                    k.set_contents_from_file(fp)
+                    k.set_acl("public-read")
+                    fp.close()
+                    return "https://s3.amazonaws.com/blah/{}.{}".format(filename, extension)
+            """
+        }
+        res = self.app.put('/v1/snippets/{}'.format(self.snippet1.id),
+                           data=json.dumps(data),
+                           content_type='application/json')
+        snippet = Snippet.query.get(self.snippet1.id)
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(snippet.code, data['snippet'])
+
     def test_delete_snippet(self):
         data = {
             "title": "Doing a push segue using StoryBoard instance instead of the prepareForSegue method",

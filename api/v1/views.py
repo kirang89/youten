@@ -74,8 +74,23 @@ def get_all_snippets_for_language(language):
                     mimetype='application/json')
 
 
+@api_v1.route('/snippets/<snippet_id>', methods=['PUT'])
+def update_snippet(snippet_id):
+    if request.json:
+        snippet = Snippet.query.get(snippet_id)
+        if snippet:
+            snippet.update_code(request.json['snippet'])
+            db.session.add(snippet)
+            db.session.commit()
+            return Response(200)
+        else:
+            return not_found()
+    else:
+        return not_acceptable()
+
+
 @api_v1.route('/snippets/<snippet_id>', methods=['DELETE'])
-def test_delete_snippet(snippet_id):
+def delete_snippet(snippet_id):
     snippet = Snippet.query.get(snippet_id)
     if snippet:
         db.session.delete(snippet)
